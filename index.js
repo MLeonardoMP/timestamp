@@ -1,9 +1,9 @@
-// index.js
-// where your node app starts
 
-// init project
+
+// init server
 var express = require('express');
 var app = express();
+const moment = require('moment');
 
 // enable CORS (https://en.wikipedia.org/wiki/Cross-origin_resource_sharing)
 // so that your API is remotely testable by FCC 
@@ -18,10 +18,24 @@ app.get("/", function (req, res) {
   res.sendFile(__dirname + '/views/index.html');
 });
 
+// Thu, 01 Jan 1970 00:00:00 GMT
 
-// your first API endpoint... 
-app.get("/api/hello", function (req, res) {
-  res.json({greeting: 'hello API'});
+app.get("/api", function (req, res) {
+  res.json({ unix: new Date().getTime() });
+});
+
+app.get("/api/:date", function (req, res) {
+
+
+    const date = new Date(req.params.date);
+    const utc = moment(date).utc().format('ddd, DD MMM YYYY HH:mm:ss [GMT]');
+    const unix = date.getTime();
+
+   isNaN(unix) ? res.json({error: 'Invalid Date'}) : res.json({utc: utc,unix: unix });
+
+  
+
+
 });
 
 
