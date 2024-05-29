@@ -21,17 +21,37 @@ app.get("/", function (req, res) {
 // Thu, 01 Jan 1970 00:00:00 GMT
 
 app.get("/api", function (req, res) {
-  res.json({ unix: new Date().getTime() });
+  const nowDate = new Date();
+  const unix = nowDate.getTime();
+  const utc = moment(date).utc().format("ddd, DD MMM YYYY HH:mm:ss [GMT]");
+  res.json({ unix: unix , utc: utc });
 });
 
 app.get("/api/:date", function (req, res) {
 
+  console.log(isNaN(req.params.date))
 
+  if (isNaN(req.params.date)) {
+    
     const date = new Date(req.params.date);
-    const utc = moment(date).utc().format('ddd, DD MMM YYYY HH:mm:ss [GMT]');
-    const unix = date.getTime();
+    var utc = moment(date).utc().format("ddd, DD MMM YYYY HH:mm:ss [GMT]");
+    var unix = date.getTime();
+  } 
+  else {
+    var unix = req.params.date;
+    const date = new Date(+unix);
+   
+    
+    var utc = moment(date).utc().format("ddd, DD MMM YYYY HH:mm:ss [GMT]");
+    console.log(date, utc);
+  }
 
-   isNaN(unix) ? res.json({error: 'Invalid Date'}) : res.json({utc: utc,unix: unix });
+
+    
+
+  
+
+   isNaN(unix) ? res.json({error: utc}) : res.json({utc: utc,unix: unix });
 
   
 
